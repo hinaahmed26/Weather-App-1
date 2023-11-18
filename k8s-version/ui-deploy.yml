@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thomosis-ui
+  labels:
+    app: thomosis-ui
+    apps_name: weather-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: thomosis-ui
+  template:
+    metadata:
+      labels:
+        app: thomosis-ui
+        apps_name: weather-app
+    spec:
+      containers:
+        - name: ui
+          image: devopseasylearning/thomisis-ui:v0.0.1
+          envFrom:
+            - configMapRef:
+                name: thomosis-ui-config
+          ports:
+            - containerPort: 3000

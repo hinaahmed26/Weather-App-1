@@ -1,0 +1,46 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: thomosis-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+    - host: opk-demo.com  # Replace with your actual domain
+      http:
+        paths:
+          - pathType: Prefix
+            path: /db
+            backend:
+              service:
+                name: thomosis-db
+                port:
+                  number: 3306
+          - pathType: Prefix
+            path: /redis
+            backend:
+              service:
+                name: thomosis-redis
+                port:
+                  number: 6379
+          - pathType: Prefix
+            path: /weather
+            backend:
+              service:
+                name: thomosis-weather
+                port:
+                  number: 5000
+          - pathType: Prefix
+            path: /auth
+            backend:
+              service:
+                name: thomosis-auth
+                port:
+                  number: 8080
+          - pathType: Prefix
+            path: /ui
+            backend:
+              service:
+                name: thomosis-ui
+                port:
+                  number: 3000

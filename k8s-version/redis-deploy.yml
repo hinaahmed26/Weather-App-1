@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: thomosis-redis
+  labels:
+    app: thomosis-redis
+    apps_name: weather-app
+spec:
+  serviceName: "thomosis-redis"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: thomosis-redis
+  template:
+    metadata:
+      labels:
+        app: thomosis-redis
+        apps_name: weather-app
+    spec:
+      containers:
+        - name: redis
+          image: redis
+          envFrom:
+            - secretRef:
+                name: thomosis-redis-secret
+          volumeMounts:
+            - name: redis-data
+              mountPath: /data
+  volumeClaimTemplates:
+    - metadata:
+        name: redis-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: opk-sc
+        resources:
+          requests:
+            storage: 1Gi  # You can adjust the storage size as needed
